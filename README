@@ -1,0 +1,8 @@
+## Exporting Proceedure
+-> Export Data 
+# mysqldump -u root -p --port=3306 --skip-column-statistics room > C:\xampp123\htdocs\2d_room_reservation\backup.sql
+
+-> Commit Changes
+# git add .
+# git commit -m ";"
+# git push origin main
