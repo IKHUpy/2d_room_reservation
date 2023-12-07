@@ -20,7 +20,7 @@
     </head>
     <body>
         <h1>
-            Choose based on what you are: 
+            Sign in 
         </h1>
         <?php
             if (isset($_POST['user_name']) && isset($_POST['privilege_type'])) {
