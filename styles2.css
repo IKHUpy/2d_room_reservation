@@ -1,0 +1,114 @@
+* {
+    color: #242423;
+    font-family: 'Roboto', sans-serif;
+    line-height: 1;
+}
+.output {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+.output h2 {
+    padding: 10px 80px;
+    background-color: rgb(255, 230, 0);
+    border-radius: 10px;
+}
+.output table {
+    align-self: center;
+}
+.main-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    flex-direction: column;
+    gap: 3px;
+    justify-content: space-around;
+}
+.main-nav .item {
+    display: flex;
+    width:85%;
+    justify-content: space-around;
+    background-color: rgb(255, 234, 206);
+    border-radius: 10px;
+    padding: 10px;
+    flex-direction: column;
+}
+.page-header {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    padding: 10px 0;
+}
+.main-nav .item .from-sys {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    align-items: center;
+}
+.from-sys b {
+    font-size: 1.2rem;
+}
+.function {
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+}
+.item img {
+    width: 50px;
+    height: 50px;
+    background-size: contain;
+    display: inline-block;
+    padding: 15px;
+}
+.btn {
+    width: fit-content;
+    cursor: pointer;
+    align-self: flex-end;
+    text-decoration: underline;
+}
+.numerical-sys-data {
+    font-weight: bold;
+    height: 70px;
+    align-self: center;
+    font-weight: bold;
+    font-size: 32px;
+    opacity: 80%;
+}
+p {
+    margin: 0;
+    padding: 0;
+}
+body {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+.main-nav {
+    background-color: #9DC3C2;
+    padding: 20px;
+    border-radius: 10px;
+}
+h2{
+    font-size: 2rem;
+    padding: 0px;
+    margin: 10px;
+}
+th { font-size: 1.4rem;}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+table, th, td {
+    border: 1px solid black;
+}
+th, td {
+    text-align: center;
+    padding: 8px 10px;
+} 
+
+th {
+    background-color: #f2f2f2;
+    padding: 10px;
+}
+
+

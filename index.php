@@ -1,14 +1,11 @@
 <?php 
     session_start();
-
     if (isset($_COOKIE['session_id'])) {
         $userId = $_COOKIE['session_id'];
-        echo "User ID from cookie: $userId";
     } else {
         $sessionId = uniqid();
         $_SESSION['session_id'] = $sessionId;
         setcookie('session_id', $sessionId, time() + 360000, '/');
-        echo 'your session id is: ' . $_SESSION['session_id'];
     }
 ?>
 <!DOCTYPE html>
@@ -30,26 +27,8 @@
                 exit();
             }
         ?>
-        <form method="post">
-            <p>
-                <label for="user_name">Enter mail:</label>
-                <input type="text" id="user_name" name="user_name">
-                <label for="user_name">Enter password:</label>
-                <input type="text" id="user_name" name="user_name">
-            </p>
-            <a href="register.php">New here?</a>
-            <p>
-                <input type="radio" name="privilege_type" value="teacher"> As Teacher
-            </p>
-            <p>
-                <input type="radio" name="privilege_type" value="student"> As Student
-            </p>
-            <p>
-                <input type="radio" name="privilege_type" value="laura"> As Laura
-            </p>
-            <p>
-                <button type="submit">Submit</button>
-            </p>
-        </form>
+        <a href="student.php">As Student</a>
+        <a href="teacher.php">As Teacher</a>
+        <a href="laura.php">As Laura</a>
     </body>
 </html>

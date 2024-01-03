@@ -1,81 +1,92 @@
+<?php
+include 'functions.php';
+$status = getStatus();
+$numTeachers = getTeacherCount();
+$start = getStart();
+$end = getEnd();
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
+        <title>Dashboard</title>
+        <link rel="stylesheet" href="styles2.css">
     </head>
     <body>
-        <?php
-            include 'functions.php';
-            $status = getStatus();
+        <div class="main-nav">
+            <?php
             if ($status === "Offline") {
-                echo "<h1>Laura's Dashboard</h1>";
-                echo '<b>Status: ' . $status . '<br>';
-                echo '<button href="">View Teachers</button>';
-                echo '<button href="">View enrolled Students</button>';
-                echo '<button href="">Invite Teachers</button>';
-                echo '<button href="">Turn Online</button>';
-                echo '<button id="generateTokensBtn"">Generate Invitation tokens</button>';
+                echo /*html*/"
+                <div class='page-header'>
+                    <h1>Laura's Dashbard</h1>
+                    <p style='align-self: flex-end;'><b>Status: </b><b style='color:red'>offline</b></p>
+                </div>
+
+                <div class='item'>
+                    <div class='from-sys'>
+                        <b>Number of teachers &nbsp</b>
+                        <img src='/2d_room_reservation/img/teacher.png' alt='Icon'>
+                    </div>
+                        <p class='numerical-sys-data'>$numTeachers</p>
+                    <a class='btn' id='view-teachers'>
+                        View
+                    </a>
+                </div>
+                
+                <div class='item'>
+                    <div class='from-sys'>
+                        <b>Invitation tokens made &nbsp</b>
+                        <img src='/2d_room_reservation/img/coin.png' alt='token_icon'>
+                    </div>
+                    <p class='numerical-sys-data'>$numTeachers</p>
+                    <div class='function'>
+                        <a class='btn' id='generateTokensBtn'>
+                            Create
+                        </a>
+                        <a class='btn'>
+                            View 
+                        </a>
+                        <a class='btn' id='more-token-info'>
+                            More 
+                        </a>
+                    </div>
+                </div>
+                
+                <div class='item'>
+                    <div class='from-sys'>
+                        <b>Scheduled Operation &nbsp</b>
+                        <img src='/2d_room_reservation/img/calendar.png' alt='token_icon'>
+                    </div>
+                    <p class='numerical-sys-data'>$start – $end</p>
+                    <div class='from-sys'>
+                        <a class='btn' id='change_s_time'>
+                            Update start date
+                        </a>
+                        <a class='btn'>
+                            Update end date
+                        </a>
+                    </div>
+
+                </div>
+                
+                ";
             } elseif ($status === 'Online') {
-                echo '
-                <button href="">View Rooms status</button>
-                <button href="">View Rooms status</button>
-                ';
+                echo /*html*/"
+                <button href=''>View Rooms status</button>
+                <button href=''>View Rooms status</button>
+                ";
             }
-        ?>
-        <section id="output_section">
-        </section>
-        <script>
-            document.getElementById('generateTokensBtn').addEventListener('click', function() {
-            var numberOfTokens = prompt("Enter the number of tokens to generate:");
+            ?>
+        </div>
+        <div id="output_section" class="output" >
+        
+        </div>
+        <div class='output-2'>
 
-            if (numberOfTokens !== null && !isNaN(numberOfTokens) && numberOfTokens > 0) {
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', 'generateTokensEndpoint.php?numberOfTokens=' + numberOfTokens, true);
+        </div>
+        <script src="ldsh_script.js"></script>
+        <script src='scripts/prepare.js'></script>
 
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        // Parse the JSON response
-                        var tokens = JSON.parse(xhr.responseText);
-                        // Create a table and append it to the document body
-                        createTable(tokens);
-                    }
-                };
-
-                xhr.send();
-            }
-        });
-
-        function createTable(tokens) {
-            // Create a table element
-            var table = document.createElement('table');
-            // Create a header row
-            var headerRow = table.insertRow(0);
-            // Add column headers
-            var headers = ['Token']; // Add your column names
-            for (var i = 0; i < headers.length; i++) {
-                var th = document.createElement('th');
-                th.textContent = headers[i];
-                headerRow.appendChild(th);
-            }
-
-            // Add data rows
-            for (var j = 0; j < tokens.length; j++) {
-                var token = tokens[j];
-                var row = table.insertRow(j + 1);
-                var cell = row.insertCell(0);
-                cell.textContent = token;
-                // Add additional cells for other data if needed
-                // cell = row.insertCell(1);
-                // cell.textContent = token.column1;
-                // cell = row.insertCell(2);
-                // cell.textContent = token.column2;
-            }
-
-            // Append the table to the document body
-            document.body.appendChild(table);
-        }
-        </script>
     </body>
 </html>

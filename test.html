@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pop-up Calendar</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #calendar-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+<button onclick="openCalendar()">Open Calendar</button>
+
+<div id="calendar-popup">
+  <h2>Calendar</h2>
+  <button onclick="closeCalendar()">Close</button>
+  <table id="calendar">
+    <!-- Calendar content will be inserted here dynamically -->
+  </table>
+</div>
+
+<script>
+  let currentDate = new Date();
+
+  function displayCalendar() {
+    const calendarBody = document.getElementById('calendar');
+    calendarBody.innerHTML = '';
+
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    let dayCounter = 1;
+
+    for (let i = 0; i < 6; i++) {
+      const row = calendarBody.insertRow();
+      for (let j = 0; j < 7; j++) {
+        const cell = row.insertCell();
+        if ((i === 0 && j < new Date(year, month, 1).getDay()) || dayCounter > daysInMonth) {
+          cell.innerHTML = '';
+        } else {
+          cell.innerHTML = dayCounter;
+          dayCounter++;
+        }
+      }
+    }
+  }
+
+  function openCalendar() {
+    const calendarPopup = document.getElementById('calendar-popup');
+    calendarPopup.style.display = 'block';
+    displayCalendar();
+  }
+
+  function closeCalendar() {
+    const calendarPopup = document.getElementById('calendar-popup');
+    calendarPopup.style.display = 'none';
+  }
+
+  // Initial display
+  displayCalendar();
+</script>
+
+</body>
+</html>

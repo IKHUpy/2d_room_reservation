@@ -1,0 +1,118 @@
+table {
+    border-collapse: collapse;
+    width: 90%;
+}
+* {
+    color: #242423;
+    font-family: 'Roboto', sans-serif;
+    line-height: 1;
+}
+p {
+    margin: 0;
+    padding: 0;
+}
+body {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+th, td {
+    text-align: center;
+} 
+td {
+    min-width: 85px;
+    width: 85px;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.highlight {
+    background-color: yellow;
+}
+input[type="text"] {
+    display:none;
+}
+.formtable {
+    margin: auto;
+    padding: auto;
+}
+
+
+
+h2{
+    font-size: 2rem;
+    padding: 0px;
+    margin: 10px;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+}
+.userItem {
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    font-size: 1.4rem;
+    justify-content: space-between;
+}
+.userItem b {
+    text-align: left;
+    margin-left: 20px;
+}
+.userItem p {
+    text-align: right;
+}
+.userInfo a {
+    text-align: right;
+    padding-top: 11px;
+    width: 100%;
+}
+a:visited {
+    color: black;
+}
+
+.main_nav {
+    background-color: #9DC3C2;
+    padding: 20px;
+    border-radius: 10px;
+}
+.main-nav-child {
+    padding: 30px;
+}
+.main-nav-child:not(:last-child) {
+    border-bottom: 1px solid #000; /* Border style and color */
+  }
+.red {
+    background-color: red; /* Yellow color, change as needed */
+}
+.tableTab h2 {
+    display: flex;
+    justify-content: center;
+}
+.tableTab {
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+.systemInfo h2 {
+    text-align: center;
+    color: #C84630;
+}
+.tools {
+    background-color: #C0E0DE;
+    padding: 40px;
+    border-radius: 10px;
+}
+.neutral-tool { background-color: white; cursor: pointer;}
+.prefer-tool { background-color: #FFF108; cursor: pointer;}
+.unprefer-tool { background-color: #011638; cursor: pointer;}
+.isLunch { background-color: gray; }
+.dayofweekheader { cursor: pointer;}

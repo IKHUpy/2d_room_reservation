@@ -1,10 +1,3 @@
-<?php
-    session_start();
-    if (isset($_COOKIE['session_id'])) {
-        $userId = $_COOKIE['session_id'];
-        echo "User ID from cookie: $userId";
-    }
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +6,17 @@
     <title>Hello, Teacher</title>
 </head>
     <body>
+        <a href="register.php">New here?</a>
+        <form action="signIn_teacher.php" method="post">
+            <p>
+                <label for="">Enter mail:</label>
+                <input type="text" name="email">
+                <label for="">Enter password:</label>
+                <input type="password" name="password">
+                <input type="submit" value="Submit">
+
+            </p>
+        </form>
         <?php 
             include 'functions.php';
             $status = getStatus();
