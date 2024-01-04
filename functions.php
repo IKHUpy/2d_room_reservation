@@ -31,7 +31,7 @@
         $query = '';
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $current_year = date('Y');
-        $school_year_code = $current_year . "-" . ($current_year + 1) . "-";
+        $school_year_code = $current_year . "-";
         $generatedTokens = array();
         for ($j = 0; $j < $how_many; $j++) {
             $randomString = '';

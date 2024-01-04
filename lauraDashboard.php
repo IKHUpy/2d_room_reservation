@@ -44,7 +44,7 @@ $end = getEnd();
                         <a class='btn' id='generateTokensBtn'>
                             Create
                         </a>
-                        <a class='btn'>
+                        <a class='btn' id='viewTokens'>
                             View 
                         </a>
                         <a class='btn' id='more-token-info'>

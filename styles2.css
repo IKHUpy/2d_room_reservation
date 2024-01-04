@@ -111,4 +111,9 @@ th {
     padding: 10px;
 }
 
+.token-box {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
 
