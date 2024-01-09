@@ -133,3 +133,9 @@ th {
     flex-direction: row;
     justify-content: space-between;
 }
+.date-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+}

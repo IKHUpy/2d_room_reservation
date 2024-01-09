@@ -200,3 +200,11 @@ document.getElementById('more-token-info').addEventListener('click', function ()
 
     })
 });
+
+document.getElementById('change_e_time').addEventListener('click', function () {
+    var date_block = document.createElement('div');
+    var date_input = document.createElement('input');
+    date_input.type = 'date';
+    
+    date_block.classList.add('date-block');
+}); 

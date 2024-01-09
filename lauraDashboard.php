@@ -66,7 +66,7 @@ $end = getEnd();
                         <a class='btn' id='change_s_time'>
                             Update start date
                         </a>
-                        <a class='btn'>
+                        <a class='btn' id='change_e_time'>
                             Update end date
                         </a>
                     </div>
