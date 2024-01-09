@@ -21,7 +21,6 @@ document.getElementById('generateTokensBtn').addEventListener('click', function(
 
 
 function createTable(data, header) {
-    console.log('entered createTable()');
     var output_section = document.getElementById('output_section');
     document.getElementById("output_section").innerHTML = "";
     var table = document.createElement('table');
@@ -86,6 +85,12 @@ function createTable(data, header) {
                 cell1.innerHTML = data[j]['associated_email'];
             }
         }
+        var incre_button = document.createElement('button');
+        var decre_button = document.createElement('button');
+
+        output_section.appendChild(decre_button);
+        output_section.appendChild(incre_button);
+
     }
     output_section.appendChild(table);
 }
@@ -132,6 +137,66 @@ document.getElementById('viewTokens').addEventListener('click', function () {
         })
         .then(data => {
             createTable(data, 'view_tokens');
-            page_num += 1;
         })
+});
+
+function dataBlock(json, header) {
+    var outputSection2 = document.getElementById('output_section_2');
+    document.getElementById("output_section_2").innerHTML = "";
+    var new_block = document.createElement('div');
+    var line_one = document.createElement('div');
+    var header_block = document.createElement('b');
+    var data_block = document.createElement('p');
+    var more_btn = document.createElement('a');
+    
+
+    console.log(json[0]['count(*)']);
+    console.log(header);
+    if (header == 'used_token_count_data') {
+        header_block.textContent = 'Used Tokens: ';
+        data_block.textContent = json[0]['count(*)'];
+    }
+    
+
+    more_btn.textContent = 'Show';
+    more_btn.classList.add('btn');
+    more_btn.style.display = 'flex';
+    
+    line_one.classList.add('line-blk');
+    line_one.appendChild(header_block);
+    line_one.appendChild(data_block);
+
+    
+    header_block.style.display = 'flex';
+    header_block.style.fontSize = '1.2rem';
+    header_block.style.alignItems = 'center';
+    header_block.style.justifyContent = 'flex-start';
+
+
+    data_block.style.display = 'flex';
+    data_block.style.alignItems = 'center';
+    data_block.classList.add('numerical-sys-data');
+    data_block.style.justifyContent = 'center';
+
+    new_block.classList.add('post-data-block');
+    new_block.appendChild(line_one);
+    new_block.appendChild(more_btn);
+
+    outputSection2.appendChild(new_block);
+}
+
+document.getElementById('more-token-info').addEventListener('click', function () {
+    fetch('used_token_count_data.php', {
+        method : 'GET'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        dataBlock(data, 'used_token_count_data');
+
+    })
 });

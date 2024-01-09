@@ -116,4 +116,20 @@ th {
     justify-content: space-between;
     flex-direction: row;
 }
-
+.output-2 {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+}
+.post-data-block {
+    display: flex;
+    width: 80%;
+    flex-direction: column;
+    padding: 12px;
+    background-color:rgb(255, 234, 206);
+    border-radius: 5px;
+}
+.line-blk {
+    flex-direction: row;
+    justify-content: space-between;
+}

@@ -2,6 +2,9 @@
 include 'functions.php';
 $status = getStatus();
 $numTeachers = getTeacherCount();
+$numTokens = getTokenCount();
+$numTokenUsed = getUsedTokenCount();
+
 $start = getStart();
 $end = getEnd();
 ?>
@@ -39,7 +42,7 @@ $end = getEnd();
                         <b>Invitation tokens made &nbsp</b>
                         <img src='/2d_room_reservation/img/coin.png' alt='token_icon'>
                     </div>
-                    <p class='numerical-sys-data'>$numTeachers</p>
+                    <p class='numerical-sys-data'>$numTokens</p>
                     <div class='function'>
                         <a class='btn' id='generateTokensBtn'>
                             Create
@@ -82,7 +85,7 @@ $end = getEnd();
         <div id="output_section" class="output" >
         
         </div>
-        <div class='output-2'>
+        <div id="output_section_2" class='output-2'>
 
         </div>
         <script src="ldsh_script.js"></script>

@@ -81,6 +81,22 @@
             return $count;
         }
     }
+    function getTokenCount() {
+        include 'connect_db.php';
+        $stmt = $connect->prepare('select count(*) from invitation_tokens; ');
+        if ($stmt->execute()) {
+            $count = $stmt->fetchColumn();
+            return $count;
+        }
+    }
+    function getUsedTokenCount() {
+        include 'connect_db.php';
+        $stmt = $connect->prepare('select count(*) from invitation_tokens where associated_email is not null;');
+        if ($stmt->execute()) {
+            $count = $stmt->fetchColumn();
+            return $count;
+        }
+    }
     function getStart() {
         include 'connect_db.php';
         $stmt = $connect->prepare('select start_time from program_status;');
