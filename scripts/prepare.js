@@ -12,6 +12,8 @@ document.getElementById('generateTokensBtn').addEventListener('click', function(
             })
             .then(tokens => {
                 createTable(tokens, 'Token');
+                var num_token_block = document.getElementById('num-token');
+                //num_token_block.innerText = (parseInt(num_token_block.innerText) + numberOfTokens).toString();
             })
             .catch(error => {
                 console.error('Error:', error);

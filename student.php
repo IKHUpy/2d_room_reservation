@@ -2,7 +2,6 @@
     session_start();
     if (isset($_COOKIE['session_id'])) {
         $userId = $_COOKIE['session_id'];
-        echo "User ID from cookie: $userId";
     }
 ?>
 <!DOCTYPE html>

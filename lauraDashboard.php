@@ -42,7 +42,7 @@ $end = getEnd();
                         <b>Invitation tokens made &nbsp</b>
                         <img src='/2d_room_reservation/img/coin.png' alt='token_icon'>
                     </div>
-                    <p class='numerical-sys-data'>$numTokens</p>
+                    <p id='num-token' class='numerical-sys-data'>$numTokens</p>
                     <div class='function'>
                         <a class='btn' id='generateTokensBtn'>
                             Create
