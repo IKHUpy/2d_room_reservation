@@ -64,7 +64,7 @@ function createTable(data, header) {
                 cell3.innerHTML = 'Yes';
             }
         }
-    } else if (header === 'view_tokens') {
+    } else if (header === 'view_tokens' || header === 'get_used_tokens') {
         table.classList.add('token-tbl');
         output_section.appendChild(document.createElement('h2')).textContent = 'Viewing Tokens';
         var headers = ['Binded Email', 'Token']; 
@@ -87,13 +87,9 @@ function createTable(data, header) {
                 cell1.innerHTML = data[j]['associated_email'];
             }
         }
-        var incre_button = document.createElement('button');
-        var decre_button = document.createElement('button');
 
-        output_section.appendChild(decre_button);
-        output_section.appendChild(incre_button);
 
-    }
+    } 
     output_section.appendChild(table);
 }
 function copyToClipboard(button) {
@@ -150,6 +146,33 @@ function dataBlock(json, header) {
     var header_block = document.createElement('b');
     var data_block = document.createElement('p');
     var more_btn = document.createElement('a');
+    var more_btn = document.getElementById('show-used-token');
+    if (!more_btn) {
+        more_btn = document.createElement('a');
+        more_btn.textContent = 'Show';
+        more_btn.classList.add('btn');
+        more_btn.style.display = 'flex';
+        more_btn.id = 'show-used-token';
+        
+        // Add click event listener only if the element is created
+        more_btn.addEventListener('click', function () {
+            fetch('get_used_tokens.php', {
+                method: 'GET'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                createTable(data, 'get_used_tokens');
+                console.log('qwewqeweqw');
+
+            });
+        });
+    };
     
 
     console.log(json[0]['count(*)']);
@@ -159,10 +182,6 @@ function dataBlock(json, header) {
         data_block.textContent = json[0]['count(*)'];
     }
     
-
-    more_btn.textContent = 'Show';
-    more_btn.classList.add('btn');
-    more_btn.style.display = 'flex';
     
     line_one.classList.add('line-blk');
     line_one.appendChild(header_block);
@@ -185,10 +204,11 @@ function dataBlock(json, header) {
     new_block.appendChild(more_btn);
 
     outputSection2.appendChild(new_block);
+   
 }
 
 document.getElementById('more-token-info').addEventListener('click', function () {
-    fetch('used_token_count_data.php', {
+fetch('used_token_count_data.php', {
         method : 'GET'
     })
     .then(response => {
@@ -199,7 +219,6 @@ document.getElementById('more-token-info').addEventListener('click', function ()
     })
     .then(data => {
         dataBlock(data, 'used_token_count_data');
-
     })
 });
 
