@@ -155,6 +155,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button href="#" onclick="selectTool(0)">Neutral tool</button>
         <button href="#" onclick="selectTool(1)">Prefer tool</button>
         <button href="#" onclick="selectTool(2)">Unprefer tool</button>
+        <button href="#" onclick="reset()">Reset tool</button>
         <input type="submit" value="Save" onclick="submitForm()">
     </div>
 
@@ -216,13 +217,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
     }
+    function reset() {
+    var tds = document.querySelectorAll('tr td');
+        for (var i = 0; i < tds.length; i++) {
+            if (tds[i].id !== undefined && tds[i].id !== null) {
+                if (tds[i].id.substring(0, 4) == 'cell') {
+                    tds[i].querySelector('input').setAttribute('value', 0);
+                    tds[i].classList.remove('neutral-tool', 'prefer-tool', 'unprefer-tool');
+                    tds[i].classList.add('neutral-tool');
+                }
+            }
+        }
+    };
     function selectColumn(inputId) {
-        console.log('wow', inputId);
         var tds = document.querySelectorAll('tr td');
         for (var i = inputId; i <= 161; i += 6) {
             var cell =  document.getElementById('cell'+i);
             cell.querySelector('input').setAttribute('value', selectedToolValue);
-            cell.classList.remove('neutral-tool', 'prefer-tool', 'unprefer-tool');
+            cell.classList.remove('neutral-tool', 'prefer-tool', 'unprefer-tool');  
             switch (selectedToolValue) {
                 case 0:
                     cell.classList.add('neutral-tool');
