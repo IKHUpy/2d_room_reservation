@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schedule Form</title>
+    <title>Teacher dashboard</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&display=swap">
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -78,25 +78,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </tr>
     
             <?php
-            $lunchTime = [
-                "Monday - 12:00pm — 12:29pm",
-                "Monday - 12:30pm — 12:59pm",
-                "Tuesday - 12:00pm — 12:29pm",
-                "Tuesday - 12:30pm — 12:59pm",
-                "Wednesday - 12:00pm — 12:29pm",
-                "Wednesday - 12:30pm — 12:59pm",
-                "Thursday - 12:00pm — 12:29pm",
-                "Thursday - 12:30pm — 12:59pm",
-                "Friday - 12:00pm — 12:29pm",
-                "Friday - 12:30pm — 12:59pm",
-                "Saturday - 12:00pm — 12:29pm",
-                "Saturday - 12:30pm — 12:59pm"
-            ];
             $asRestrict = [];
             include 'connect_db.php';
             $getData_stmt = $connect->prepare('SELECT day_of_week, start_time, end_time, is_restricted FROM teacher_preferred_schedule WHERE token = ?;');
             $asPrefer = [];
-            $inputTemplate = '? - ? — ?';
             $token = $_SESSION['token'];
             if ($getData_stmt->execute([$token])) {
                 $results = $getData_stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -120,13 +105,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $td_id += 1;
                 foreach ($daysOfWeek as $day) {
                     $inputName = "$day - $time";
-                    $isLunch = in_array($inputName, $lunchTime);
                     $isRestrict = in_array($inputName, $asRestrict);
                     $isPrefer = in_array($inputName, $asPrefer);
                     $value = 0;
                     $value = $isPrefer ? 1 : $value;
                     $value = $isRestrict ? 2 : $value;
-                    $value = $isLunch ? 3 : $value;
                     $class = '';
                     if ($value == 2) {
                         $class = 'unprefer-tool';
@@ -134,9 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $class = 'prefer-tool';
                     } elseif ($value == 0) {
                         $class = 'neutral-tool';
-                    } elseif ($value == 3) {
-                        $class = 'isLunch';
-                    } 
+                    }
 
                     echo "<td style='' class='$class' onclick='writeToInput($id)' id='cell$id' value=''><input id='$id' type='text' value='$value' name='$inputName' class='' readonly></td>";
                     $id += 1;
@@ -177,9 +158,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 break;
             case 2:
                 document.getElementById('cell'+inputId).classList.add('unprefer-tool');
-                break;
-            case 3:
-                document.getElementById('cell'+inputId).classList.add('isLunch');
                 break;
             default:
                 break;
@@ -286,7 +264,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 function generateTimeSlots() {
     $timeSlots = [];
     $startTime = strtotime('7:30 AM');
-    $endTime = strtotime('8:30 PM'); // 30 minutes less at least
+    $endTime = strtotime('8:00 PM'); // 30 minutes less at least
 
     while ($startTime <= $endTime) {
         $nextTime = date('h:ia', $startTime + 30 * 59);

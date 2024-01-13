@@ -1,25 +1,5 @@
 
-document.getElementById('generateTokensBtn').addEventListener('click', function() {
-    var numberOfTokens = prompt("Enter the number of tokens to generate:");
 
-    if (numberOfTokens !== null && !isNaN(numberOfTokens) && numberOfTokens > 0) {
-        fetch('generateTokensEndpoint.php?numberOfTokens=' + numberOfTokens)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(tokens => {
-                createTable(tokens, 'Token');
-                var num_token_block = document.getElementById('num-token');
-                //num_token_block.innerText = (parseInt(num_token_block.innerText) + numberOfTokens).toString();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }
-});
 
 
 function createTable(data, header) {
@@ -65,42 +45,105 @@ function createTable(data, header) {
             }
         }
     } else if (header === 'view_tokens' || header === 'get_used_tokens') {
-        table.classList.add('token-tbl');
-        output_section.appendChild(document.createElement('h2')).textContent = 'Viewing Tokens';
-        var headers = ['Binded Email', 'Token']; 
-        for (var i = 0; i < headers.length; i++) {
-            var th = document.createElement('th');
-            th.textContent = headers[i];
-            headerRow.appendChild(th);
-        }
-        for (var j = 0; j < data.length; j++) {
-            var token = data[j];
-            var row = table.insertRow(j + 1);
-            var cell1 = row.insertCell(0);
-            var cell2 = row.insertCell(1);
-            cell2.classList.add('token-box');
-            if (data[j]['associated_email'] == null) {
-                cell2.innerHTML ='<div>' + data[j]['token'] + '</div>' + '<button onclick="copyToClipboard(this)" style="margin-left: 10px;">Copy</button>';
-                cell1.innerHTML = 'None';
-            } else {
-                cell2.innerHTML ='<div>' + data[j]['token'] + '</div>';
-                cell1.innerHTML = data[j]['associated_email'];
+        output_section.appendChild(document.createElement('h2')).textContent = 'Invitation tokens';
+        if (data.length > 0) {
+            table.classList.add('token-tbl');
+            var headers = ['Token']; 
+            for (var i = 0; i < headers.length; i++) {
+                var th = document.createElement('th');
+                th.textContent = headers[i];
+                headerRow.appendChild(th);
             }
+            for (var j = 0; j < data.length; j++) {
+                var token = data[j];
+                var row = table.insertRow(j + 1);
+                var cell2 = row.insertCell(0);
+                cell2.classList.add('token-box');
+                if (data[j]['associated_email'] == null) {
+                    cell2.innerHTML ='<div>' + data[j]['token'] + '</div>' + '<div><button onclick="copyToClipboard(this)" style="margin-left: 10px;">Copy</button><button onclick="deleteToken(this)" style="margin-left: 10px;">Delete</button></div>';
+                } else {
+                    cell2.innerHTML ='<div>' + data[j]['token'] + '</div>';
+                }
+            }
+        } else {
+            var emptyData = document.createElement('h3');
+            emptyData.style.border = '1px solid black';
+            emptyData.style.padding = '10px';
+            emptyData.textContent = 'No tokens available';
+
         }
 
-
+        var create_btn = document.createElement('a');
+        create_btn.id = 'generateTokensBtn';
+        create_btn.classList.add('btn');
+        create_btn.textContent = 'generate more token';
+        create_btn.style.alignSelf = 'center';
+        output_section.appendChild(emptyData);
+        output_section.appendChild(create_btn);
+        document.getElementById('generateTokensBtn').addEventListener('click', function() {
+            var numberOfTokens = prompt("Enter the number of tokens to generate:");
+        
+            if (numberOfTokens !== null && !isNaN(numberOfTokens) && numberOfTokens > 0) {
+                fetch('generateTokensEndpoint.php?numberOfTokens=' + numberOfTokens)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(tokens => {
+                        createTable(tokens, 'Token');
+                        var num_token_block = document.getElementById('num-token');
+                        //num_token_block.innerText = (parseInt(num_token_block.innerText) + numberOfTokens).toString();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+        });
     } 
     output_section.appendChild(table);
 }
 function copyToClipboard(button) {
-const textToCopy = button.parentNode.textContent.trim().slice(0, -4);
-const textarea = document.createElement('textarea');
-textarea.value = textToCopy;
-document.body.appendChild(textarea);
-textarea.select();
-document.execCommand('copy');
-document.body.removeChild(textarea);
-alert('Text copied to clipboard: ' + textToCopy);
+    const textToCopy = button.parentNode.textContent.trim().slice(0, -4);
+    const textarea = document.createElement('textarea');
+    textarea.value = textToCopy;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    alert('Text copied to clipboard: ' + textToCopy);
+}
+function deleteToken(button) {
+    const isConfirmed = confirm("Are you sure you want to delete this token?");
+    if (isConfirmed) {
+        const tokenValue = button.parentNode.parentNode.querySelector('div').innerText;
+        fetch('delete_token_data.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ token: tokenValue }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data == 1) {
+                console.log('1')
+                const rowToRemove = button.parentNode.parentNode;
+                rowToRemove.parentNode.removeChild(rowToRemove);
+            } else {
+                console.log('0')
+            }
+        })
+        .catch(error => {
+            console.error('Error during fetch operation:', error);
+        });
+    }
 }
 
 
@@ -166,9 +209,7 @@ function dataBlock(json, header) {
                 return response.json();
             })
             .then(data => {
-                console.log(data);
                 createTable(data, 'get_used_tokens');
-                console.log('qwewqeweqw');
 
             });
         });
@@ -207,21 +248,6 @@ function dataBlock(json, header) {
    
 }
 
-document.getElementById('more-token-info').addEventListener('click', function () {
-fetch('used_token_count_data.php', {
-        method : 'GET'
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        dataBlock(data, 'used_token_count_data');
-    })
-});
-
 document.getElementById('change_e_time').addEventListener('click', function () {
     var date_block = document.createElement('div');
     var date_input = document.createElement('input');
@@ -229,3 +255,7 @@ document.getElementById('change_e_time').addEventListener('click', function () {
     
     date_block.classList.add('date-block');
 }); 
+
+
+
+

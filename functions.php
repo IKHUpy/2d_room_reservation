@@ -102,7 +102,7 @@
         $stmt = $connect->prepare('select start_time from program_status;');
         if ($stmt->execute()) {
             $time = $stmt->fetchColumn();
-            $dateOnly = date('Y-m-d', strtotime($time));
+            $dateOnly = date('m-d-y', strtotime($time));
             return $dateOnly;
         }
     }
@@ -111,7 +111,7 @@
         $stmt = $connect->prepare('select end_time from program_status;');
         if ($stmt->execute()) {
             $time = $stmt->fetchColumn();
-            $dateOnly = date('Y-m-d', strtotime($time));
+            $dateOnly = date('m-d-y', strtotime($time));
             return $dateOnly;
         }
     }

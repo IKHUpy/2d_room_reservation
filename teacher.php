@@ -17,17 +17,5 @@
 
             </p>
         </form>
-        <?php 
-            include 'functions.php';
-            $status = getStatus();
-            echo '<br><b>Status: '.$status.'<br>';
-            if ($status === 'Offline') {
-                echo "<h1>Teacher's Dashboard</h1>";
-            } else {
-                echo `
-                <h1> Your Schedule: </h1>
-                `;
-            }
-        ?>
     </body>
 </html>
