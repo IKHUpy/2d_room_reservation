@@ -29,6 +29,9 @@ body {
     gap: 3px;
     
 }
+button {
+    cursor: pointer;
+}
 .item {
     display: flex;
     width: 100%;
@@ -152,13 +155,18 @@ th {
 .selected-date {
     background-color: yellow;
 }
-.userdata {
+.userdata, .roomData {
     display: flex;  
     flex-direction: row;
     width: 100%;
-    justify-content: center;
+    justify-content: space-between;
     gap: 20px;
-    
+    display: flex;
+    position: sticky;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    top: 0;
+    background-color: white;
 }
 .restricted {
     background-color: rgb(0, 0, 97);
