@@ -1,14 +1,15 @@
-var count = 0;
-var roomScheduleData;
+var teacherCounter = 0;
+var tpScheduleData;
 var daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 function showSchedules() {
-    if (roomScheduleData[count]) {
+    if (tpScheduleData[teacherCounter]) {
         var outputSection = document.getElementById('output_section');
-        var username = roomScheduleData[count]['username'];
-        var is_fulltime = roomScheduleData[count]['is_fulltime'];
-        var email = roomScheduleData[count]['email'];
-        var schedule = roomScheduleData[count]['schedule'];
+        outputSection.innerHTML = '';
+        var username = tpScheduleData[teacherCounter]['username'];
+        var is_fulltime = tpScheduleData[teacherCounter]['is_fulltime'];
+        var email = tpScheduleData[teacherCounter]['email'];
+        var schedule = tpScheduleData[teacherCounter]['schedule'];
     
         var htmlContent = `
             <h2>Teacher Preferred Schedule</h2>
@@ -19,11 +20,10 @@ function showSchedules() {
                 <p>${email}</p>
                 <button onclick='increCount()'>next</button>
             </div>
-            <form class="tps-formtable" id="tps-formtable" action="updatePreferredSchedule.php" method="post">
+            <form class="tps-formtable" id="tps-formtable" action="" method="post">
                 <table>
                     <tr>
                         <th>Day</th>`;
-        var daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         var daysOfWeekCUT = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         daysOfWeekCUT.forEach(function (day, index) {
             htmlContent += `<th class='dayofweekheader' onclick='selectColumn(${index})'>${day}</th>`;
@@ -38,7 +38,9 @@ function showSchedules() {
             });
             htmlContent += `</tr>`;
         });
-        htmlContent += `</table></form>`;
+        htmlContent += `</table></form>
+        <div></div>
+        <div id='tbl'></div>`;
         outputSection.innerHTML = htmlContent;
         schedule.forEach(function (n) {
             var sstart = convertTimeToAMPM(n['start_time']);
@@ -56,7 +58,7 @@ function showSchedules() {
                 }
             }
         });
-    } else if (!roomScheduleData) {
+    } else if (!tpScheduleData) {
         document.getElementById('output_section').innerHTML(`<h2>Teacher Preferred Schedule</h2>
         <p>No saved schedules :<</p>
         `);
@@ -64,7 +66,7 @@ function showSchedules() {
 
 }
 function callTeacherSchedule() {
-    if (!roomScheduleData) {
+    if (!tpScheduleData) {
         fetch('get_all_schedule_data.php', {
             method: 'GET',
             headers: {
@@ -73,7 +75,7 @@ function callTeacherSchedule() {
         })
         .then(response => response.json())
         .then(data => {
-            roomScheduleData = (data); 
+            tpScheduleData = (data); 
             showSchedules();
         })
         .catch(error => {
@@ -114,14 +116,14 @@ function convertTimeToAMPM(time) {
     return hours + ':' + minutes + ' ' + period;
 }
 function increCount() {
-    if (roomScheduleData[count+1] != undefined){
-        count += 1;
+    if (tpScheduleData[teacherCounter+1] != undefined){
+        teacherCounter += 1;
         showSchedules();
     };
 };
 function decreCount() {
-    if (count != 0) {
-        count -= 1;
+    if (teacherCounter != 0) {
+        teacherCounter -= 1;
         showSchedules();
     };
 };
