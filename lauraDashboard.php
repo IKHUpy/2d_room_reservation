@@ -82,7 +82,7 @@ $end = getEnd();
                             <img src='/2d_room_reservation/img/calendar.png' alt='token_icon'>
                         </div>
                         <div class='function'>
-                            <a class='btn' id='view-schedules' onclick='arrangeSchedule(); callRoomSchedule()'>
+                            <a class='btn' id='view-schedules' onclick='arrangeSchedule(); callRoomSchedule(); callTeacherSubject()'>
                                 Start
                             </a>
                         </div>

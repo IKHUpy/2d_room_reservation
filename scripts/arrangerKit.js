@@ -1,5 +1,6 @@
 var roomCounter = 0;
 var roomScheduleData;
+var teacherSubjectData;
 function arrangeSchedule() {
     var outputSection = document.getElementById('output_section');
     var existingParent = document.getElementById('parentContainer');
@@ -69,6 +70,7 @@ function roomSection() {
     }
 };
 function callRoomSchedule() {
+    console.log('123');
     if (!roomScheduleData) {
         fetch('get_all_room_schedule_data.php', {
             method: 'GET',
@@ -83,10 +85,31 @@ function callRoomSchedule() {
             roomSection();
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error:', (error));
         });
     } else {
         roomSection();
+    }
+}
+function callTeacherSubject() {
+    console.log('321');
+    if (!teacherSubjectData) {
+        fetch('get_all_teacher_subject_data.php', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            teacherSubjectData = (data); 
+            console.log(teacherSubjectData);
+        })
+        .catch(error => {
+            console.error('Error:', (error));
+        });
+    } else {
+        console.log(teacherSubjectData);
     }
 }
 function increRoomCount() {
