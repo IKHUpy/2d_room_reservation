@@ -5,7 +5,7 @@
         $enteredPassword = $_POST['password'];
         $is_authenticated = authenticateUser($enteredPassword); 
         if ($is_authenticated === True) {
-            header("Location: lauraDashboard.php");
+            header("Location: teacher/index.php");
             exit();
         }  else {
             header("Location: index.php");

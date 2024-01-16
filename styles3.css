@@ -43,9 +43,41 @@ nav a:hover, .body a:hover{
 .room-body {
     display: flex;
     justify-content: center;
+    flex-direction: column;
 }
 .row-data {
     display: flex;
     width: 50%;
     justify-content: space-around;
+}
+.rs-formtable {
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+th, td {
+    text-align: center;
+} 
+td {
+    min-width: 85px;
+    width: 85px;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+.owned {
+    background-color: #d4d400;
+}
+.other {
+    background-color: #0271B9;
 }
