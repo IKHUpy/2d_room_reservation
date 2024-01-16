@@ -2,6 +2,7 @@
     include 'connect_db.php';
     include 'functions.php';
     session_start();
+    $status = getStatus();
     $cek_stmt = $connect->prepare('SELECT COUNT(*) FROM teachers WHERE email = ? AND password = ?;');
     $getUserData_stmt = $connect->prepare('SELECT email, username, last_name, token FROM teachers WHERE email = ?');
     if (!empty($_POST['email']) && !empty($_POST['password'])) {
@@ -18,7 +19,11 @@
                     $_SESSION['last_name'] = $userData['last_name'];
                     $_SESSION['token'] = $userData['token'];
                     $_SESSION['type'] = $userData['is_fulltime'] ? "Regular" : "Part-time";
-                    header("Location: teacherDashboard.php");
+                    if ($status == "Online") {
+                        header("Location: teacher/index.php");
+                    } else if ($status == "Offline"){
+                        header("Location: teacherDashboard.php");
+                    }
                     exit();
                 }
             } else {

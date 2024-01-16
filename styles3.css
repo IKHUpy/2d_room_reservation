@@ -1,0 +1,51 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    display: flex;
+    background-color: #E7B725;
+    color: #fff;
+    padding: 10px;
+    justify-content: space-around;
+    text-align: justify;
+    flex-direction: row;
+}
+
+nav, .body {
+    display: flex;
+    justify-content: right;
+    background-color: #0271B9;
+    padding: 10px;
+}
+
+nav a, .body a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+nav a:hover, .body a:hover{
+    background-color: #1d80c2;
+}
+.dashboard {
+    display: flex;
+    justify-content: center;
+    width: 50%;
+    font-weight: bold;
+}
+.room-body {
+    display: flex;
+    justify-content: center;
+}
+.row-data {
+    display: flex;
+    width: 50%;
+    justify-content: space-around;
+}

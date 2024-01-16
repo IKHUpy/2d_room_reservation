@@ -1,7 +1,9 @@
 <?php
 include 'connect_db.php';
+session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $query = "SELECT code, floor_level, has_projector, seat_count, type FROM room;";
+    $token = $_SESSION['token'];
+    $query = "SELECT code, floor_level, has_projector, seat_count, 'type' FROM room;";
     $stmt = $connect->query($query);
     if ($stmt) {
         $data = array();
@@ -13,11 +15,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $roomScheduleData = array();
             while ($row2 = $stmt2->fetch(PDO::FETCH_ASSOC)) {
                 $roomScheduleData[] = array(
-                    'day_of_week' => $row2['date_of_week'],
+                    'day_of_week' => $row2['day_of_week'],
                     'start_time' => $row2['start_time'],
                     'end_time' => $row2['end_time'],
                     'token' => $row2['token'],
-                    'subject_id' => $row2['subject_code']
+                    'subject_code' => $row2['subject_id']
                 );
             };
             $data[] = array(
