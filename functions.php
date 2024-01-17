@@ -119,4 +119,45 @@
         include 'connect_db.php';
         $stmt = $connect->prepare('');
     } 
+    function displayTbl() {
+
+    }
+    function getTimeSlots($rows2) {
+        $return = array();
+
+        foreach ($rows2 as $rowVal) {
+            $toConvert = $rowVal['day_of_week']. ' - '.convertTime($rowVal['start']) . ' — ' . convertTime($rowVal['end']);
+            $return[] = array(
+                'cell_value' => $toConvert,
+                'cell_day' => $rowVal['day_of_week'],
+                'cell_start_end' => convertTime($rowVal['start']) . ' — ' . convertTime($rowVal['end']),
+                'cell_code' => $rowVal['subject_code'],
+                'cell_room' => $rowVal['room_code'],
+            );
+        }
+        return $return;
+    }
+
+    function convertTime($time) {
+        $formattedTime = DateTime::createFromFormat('H:i:s', $time)->format('h:i A');
+        return $formattedTime;
+    }
+    function generateTimeSlots() {
+        $timeSlots = [];
+        $startTime = new DateTime('1970-01-01T07:30:00');
+        $endTime = new DateTime('1970-01-01T20:00:00');
+    
+        while ($startTime <= $endTime) {
+            $nextTime = clone $startTime;
+            $nextTime->add(new DateInterval('PT' . (30 * 59) . 'S'));
+    
+            $formattedStartTime = $startTime->format('h:i A');
+            $formattedNextTime = $nextTime->format('h:i A');
+    
+            $timeSlots[] = "$formattedStartTime — $formattedNextTime";
+    
+            $startTime->add(new DateInterval('PT' . (30 * 60) . 'S'));
+        }
+        return $timeSlots;
+    };
 ?>

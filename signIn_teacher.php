@@ -1,6 +1,8 @@
 <?php
     include 'connect_db.php';
     include 'functions.php';
+    session_unset();
+    session_destroy();
     session_start();
     $status = getStatus();
     $cek_stmt = $connect->prepare('SELECT COUNT(*) FROM teachers WHERE email = ? AND password = ?;');
@@ -19,6 +21,7 @@
                     $_SESSION['last_name'] = $userData['last_name'];
                     $_SESSION['token'] = $userData['token'];
                     $_SESSION['type'] = $userData['is_fulltime'] ? "Regular" : "Part-time";
+                    $_SESSION["table_style"] = 'Week - Time';
                     if ($status == "Online") {
                         header("Location: teacher/index.php");
                     } else if ($status == "Offline"){

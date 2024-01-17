@@ -1,41 +1,9 @@
 <?php
-function generateTimeSlots() {
-    $timeSlots = [];
-    $startTime = new DateTime('1970-01-01T07:30:00');
-    $endTime = new DateTime('1970-01-01T20:00:00');
-
-    while ($startTime <= $endTime) {
-        $nextTime = clone $startTime;
-        $nextTime->add(new DateInterval('PT' . (30 * 59) . 'S'));
-
-        $formattedStartTime = $startTime->format('h:i A');
-        $formattedNextTime = $nextTime->format('h:i A');
-
-        $timeSlots[] = "$formattedStartTime — $formattedNextTime";
-
-        $startTime->add(new DateInterval('PT' . (30 * 60) . 'S'));
-    }
-
-    return $timeSlots;
-};
-function getTimeSlots($rows2) {
-    $return = array();
-
-    foreach ($rows2 as $rowVal) {
-        $toConvert = $rowVal['day_of_week']. ' - '.convertTime($rowVal['start']) . ' — ' . convertTime($rowVal['end']);
-        $return[] = array(
-            'cell_value' => $toConvert,
-            'cell_code' => $rowVal['subject_code'],
-            'cell_room' => $rowVal['room_code']
-        );
-    }
-    return $return;
-}
-
-function convertTime($time) {
-    $formattedTime = DateTime::createFromFormat('H:i:s', $time)->format('h:i A');
-    return $formattedTime;
-}
+include './functions.php';
+session_start(); 
+include 'connect_db.php';
+$token = $_SESSION['token'];
+$email = $_SESSION['email'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,26 +18,20 @@ function convertTime($time) {
     <div>
         <header>
             <h1>Room viewing</h1>
-            <h3><?php session_start(); echo $_SESSION['email']?></h3>
+            <h3><?php echo $_SESSION['email']?></h3>
         </header>
         <nav>
+            <a href="./teacher/index.php">Back to dashboard</a>
             <a href="#">Settings</a>
         </nav>
     </div>
     <div class="room-body">
 <?php
-    include 'connect_db.php';
-    $token = $_SESSION['token'];
-    $email = $_SESSION['email'];
     $roomCounter = isset($_GET['roomCounter']) ? intval($_GET['roomCounter']) : 0;
-    $query = "SELECT code, floor_level, has_projector, seat_count, 'type' FROM room;";
-    $query2 = "SELECT start, end, reserver, is_fixed, day_of_week, subject_code, room_code FROM room_schedules WHERE reserver = ?";
-    $stmt2 = $connect->prepare($query2);
-    $stmt = $connect->query($query);
-    if ($stmt && $stmt2->execute([$email])) {
+    if ($token && $email) { 
         $data = array();
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $rows2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+        $rows = $_SESSION['room'];
+        $rows2 = $_SESSION['myRoom'];
         $roomCount = count($rows);
 
         if ($roomCounter < 0) {
@@ -98,17 +60,22 @@ function convertTime($time) {
         foreach ($timeSlots as $timeSlot) {
             $htmlContent .= "<tr>
                                 <td>$timeSlot</td>";
+            
             foreach ($daysOfWeek as $day) {
                 $value = "$day - $timeSlot";
-                foreach ($ownedTimeSlots as $ownedTimeSlot) {
-                    $vv = $ownedTimeSlot['cell_value'];
-                    $cc = $ownedTimeSlot['cell_code'];
-                    $rr = $ownedTimeSlot['cell_room'];
-                    if ($value == $vv && $rr == $code) {
-                        $htmlContent .= "<td class='owned' value='$vv'>$cc</td>";
-                    } else {
-                        $htmlContent .= "<td class='' value='$value'></td>";
+                if ($ownedTimeSlots) {
+                    foreach ($ownedTimeSlots as $ownedTimeSlot) {
+                        $vv = $ownedTimeSlot['cell_value'];
+                        $cc = $ownedTimeSlot['cell_code'];
+                        $rr = $ownedTimeSlot['cell_room'];
+                        if ($value == $vv && $rr == $code) {
+                            $htmlContent .= "<td class='owned' value='$vv'>$cc</td>";
+                        } else {
+                            $htmlContent .= "<td class='' value='$value'></td>";
+                        }
                     }
+                } else {
+                    $htmlContent .= "<td class='' value='$value'></td>";
                 }
                 
             }
@@ -126,7 +93,6 @@ function convertTime($time) {
             </div>
             <button onclick='nextRoom()'>next</button>
             </div>
-
                 <form class='rs-formtable' id='rs-formtable' action='' method='post'>
                     <table>
                         <tr>
@@ -135,17 +101,19 @@ function convertTime($time) {
                         </tr>    
                     </table>
                 </form>
-
         <script>
-            function prevRoom() {
-                window.location.href = '?roomCounter=" . ($prevCounter) . "';
-            }
-    
-            function nextRoom() {
-                window.location.href = '?roomCounter=" . ($roomCounter + 1) . "';
-            }
+            
+        function prevRoom() {
+            window.location.replace('?roomCounter=" . ($prevCounter) . "');
+        }
+
+        function nextRoom() {
+            window.location.replace('?roomCounter=" . ($roomCounter + 1) . "');
+        }
         </script>
         ";
+    } else {
+        echo 'aw';
     }
 ?>
     </div>

@@ -1,3 +1,17 @@
+<?php
+include '../connect_db.php';
+session_start(); 
+$token = $_SESSION['token'];
+$email = $_SESSION['email'];
+$query = "SELECT code, floor_level, has_projector, seat_count, 'type' FROM room;";
+$query2 = "SELECT start, end, reserver, is_fixed, day_of_week, subject_code, room_code FROM room_schedules WHERE reserver = ?";
+$stmt2 = $connect->prepare($query2);
+$stmt = $connect->query($query);
+if ($stmt && $stmt2->execute([$email])) {
+    $_SESSION['room'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $_SESSION['myRoom'] = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,16 +25,21 @@
     <div>
         <header>
             <h1>Teacher Dashboard</h1>
-            <h3><?php session_start(); echo $_SESSION['email']?></h3>
+            <h3><?php echo $email?></h3>
         </header>
         <nav>
+            <a href="../teacher/subjects.php">View Subjects</a>
+            <a href="../teacher/room.php">View Schedule</a>
+            <a href="../room.php">View Rooms</a>
             <a href="#">Settings</a>
         </nav>
     </div>
     <div class="body">
         <div class="dashboard">
-            <a href="../room.php" onclick="callTeacherSchedule(); callRoomSchedule();">Check Rooms</a>
         </div>
+    </div>
+    <div>
+
     </div>
 <?php
     
