@@ -17,7 +17,7 @@ session_start();
     <div>
         <header>
             <h1>Schedule viewing</h1>
-            <h3><?php echo $_SESSION['email']?></h3>
+            <h3><a href="./user/setting.php"><?php echo $_SESSION['email']?></a></h3>
         </header>
         <nav style="justify-content:space-between;">
             <div class='nav-nav'>
@@ -56,31 +56,47 @@ session_start();
         
         $htmlContent = '';
         if ($_SESSION["table_style"] == 'Week - Time' || $_GET['table_style'] == 'Week - Time') {
+            $days = array_unique(array_column($rows2, 'day_of_week'));
+            $durations = array();
+            foreach ($rows2 as $row) {
+                $start = convertTime($row['start']);
+                $end = convertTime($row['end']);
+                $duration = "$start — $end";
+                $durations[] = $duration;
+            }
+            $durations = array_unique($durations);
             $daysOfWeekCUT = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             $daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            foreach ($daysOfWeekCUT as $index => $day) {
+            foreach ($days as $day) {
                 $htmlContent .= "<th class='dayofweekheader' onclick=''>$day</th>";
             }
-            $rooms = generateTimeSlots();   
+            $generateTimeSlots = generateTimeSlots();   
             $ownedTimeSlots = getTimeSlots($rows2);
-            foreach ($rooms as $room) {
+            foreach ($durations as $duration) {
                 $rowData = '';
                 $empty = '';
-                foreach ($daysOfWeek as $day) {
-                    $value = "$day - $room";
+                foreach ($days as $day) {
+                    $value = "$day - $duration";
+                    $td = "<td class='owned' value='$value'>";
+                    $found = false;
                     foreach ($ownedTimeSlots as $ownedTimeSlot) {
                         $vv = $ownedTimeSlot['cell_value'];
                         $cc = $ownedTimeSlot['cell_code'];
                         $rr = $ownedTimeSlot['cell_room'];
-                        if ($value == $vv) {
-                            $rowData .= "<td class='owned' value='$vv'>$rr - $cc</td>";
-                        } else {
-                            $empty .= "<td class='' value='$vv'></td>";
+                        $cell_day = $ownedTimeSlot['cell_day'];
+                        $roomSubDuration = $ownedTimeSlot['cell_start_end'];
+                        if ($value == "$cell_day - $roomSubDuration") {
+                            $td .= "<div>$rr - $cc</div>";
+                            $found = true;
                         }
+                    }
+                    $td .= "</td>";
+                    if ($found == true) {
+                        $rowData .= $td;
                     }
                 }
                 if ($rowData != '') {
-                    $htmlContent .= "<tr><td>$room</td>";
+                    $htmlContent .= "<tr><td>$duration</td>";
                     $htmlContent .= $rowData;
                     $htmlContent .= $empty;
                     $htmlContent .= "</tr>";
@@ -97,43 +113,43 @@ session_start();
                     </form>
             ";
         } else if ($_SESSION["table_style"] == 'Subject - Room' || $_GET['table_style'] == 'Subject - Room') {
-            $subjects = array();
-            $rooms = array();
-            foreach ($rows2 as $rowVal) {
-                $subjects[] = $rowVal['subject_code'];
-                $rooms[] = $rowVal['room_code'];
-            }
+            $subjects = array_unique(array_column($rows2, 'subject_code'));
+            $rooms = array_unique(array_column($rows2, 'room_code'));
             
             foreach ($subjects as $subject) {
                 $htmlContent .= "<th class='dayofweekheader'>$subject</th>";
             }
             $generateTimeSlots = generateTimeSlots();   
-            $ownedTimeSlots = getTimeSlots($rows2);
+            $roomSchedules = getTimeSlots($rows2);
             foreach ($rooms as $room) {
                 $rowData = '';
-                $empty = '';
                 foreach ($subjects as $subject) {
                     $value = "$subject - $room";
-
-                    foreach ($ownedTimeSlots as $ownedTimeSlot) {
-                        $vv = $ownedTimeSlot['cell_value'];
-                        $nn = $ownedTimeSlot['cell_start_end'];
-                        $jj = $ownedTimeSlot['cell_day'];
-                        $cc = $ownedTimeSlot['cell_code'];
-                        $rr = $ownedTimeSlot['cell_room'];
+                    $td = "<td class='owned' value='$value'>";
+                    $found = false;
+                    foreach ($roomSchedules as $roomSchedule) {
+                        $vv = $roomSchedule['cell_value'];
+                        $nn = $roomSchedule['cell_start_end'];
+                        $jj = $roomSchedule['cell_day'];
+                        $cc = $roomSchedule['cell_code'];
+                        $rr = $roomSchedule['cell_room'];
                         if ($value == "$cc - $rr") {
-                            $rowData .= "<td class='owned' value='$value'>$jj - $nn</td>";
-                        }
+                            $td .= "<div>$jj - $nn</div>";
+                            $found = true;
+                        } 
+                    }
+                    $td .= "</td>";
+                    if ($found == true) {
+                        $rowData .= $td;
                     }
                 }
                 if ($rowData != '') {
                     $htmlContent .= "<tr><td>$room</td>";
                     $htmlContent .= $rowData;
-                    $htmlContent .= $empty;
                     $htmlContent .= "</tr>";
                 }
             }
-            echo "
+            echo /*html*/"
                     <form class='rs-formtable' id='rs-formtable' action='' method='post'>
                         <table>
                             <tr>

@@ -9,7 +9,7 @@ $email = $_SESSION['email'];
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, ini`t`ial-scale=1.0">
     <title>Room viewing</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&display=swap">
     <link rel="stylesheet" href="./styles3.css">
@@ -18,11 +18,16 @@ $email = $_SESSION['email'];
     <div>
         <header>
             <h1>Room viewing</h1>
-            <h3><?php echo $_SESSION['email']?></h3>
+            <h3><a href="./user/setting.php"><?php echo $_SESSION['email']?></a></h3>
         </header>
-        <nav>
-            <a href="./teacher/index.php">Back to dashboard</a>
-            <a href="#">Settings</a>
+        <nav style="justify-content:space-between;">
+            <div class='nav-nav'>
+                <a href="./teacher/room/transfer.php">Transfer a Subject</a>
+            </div>  
+            <div class='nav-nav'>
+                <a href="./teacher/index.php">Back to dashboard</a>
+                <a href="#">Settings</a>
+            </div>
         </nav>
     </div>
     <div class="room-body">
@@ -57,28 +62,35 @@ $email = $_SESSION['email'];
         $tableTime = '';
         $timeSlots = generateTimeSlots();   
         $ownedTimeSlots = getTimeSlots($rows2);
+        // column
         foreach ($timeSlots as $timeSlot) {
             $htmlContent .= "<tr>
                                 <td>$timeSlot</td>";
-            
+            // row
             foreach ($daysOfWeek as $day) {
                 $value = "$day - $timeSlot";
-                if ($ownedTimeSlots) {
-                    foreach ($ownedTimeSlots as $ownedTimeSlot) {
-                        $vv = $ownedTimeSlot['cell_value'];
-                        $cc = $ownedTimeSlot['cell_code'];
-                        $rr = $ownedTimeSlot['cell_room'];
-                        if ($value == $vv && $rr == $code) {
-                            $htmlContent .= "<td class='owned' value='$vv'>$cc</td>";
-                        } else {
-                            $htmlContent .= "<td class='' value='$value'></td>";
-                        }
-                    }
-                } else {
-                    $htmlContent .= "<td class='' value='$value'></td>";
+                $owned_td = "<td class='owned' value='$value'>";
+                $td = "<td class='' value='$value'>";
+                $owned = false;
+                foreach ($ownedTimeSlots as $ownedTimeSlot) {
+                    $vv = $ownedTimeSlot['cell_value'];
+                    $cc = $ownedTimeSlot['cell_code'];
+                    $rr = $ownedTimeSlot['cell_room'];
+                    $cell_day = $ownedTimeSlot['cell_day'];
+                    $roomSubDuration = $ownedTimeSlot['cell_start_end'];
+                    if ($value == $vv && $rr == $code) {
+                        $owned_td .= "$rr - $cc";
+                        $owned = true;
+                    } 
                 }
-                
-            }
+                if ($owned == true) { 
+                    $owned_td .= "</td>";
+                    $htmlContent .= $owned_td;
+                } else {
+                    $td .= "</td>";
+                    $htmlContent .= $td;
+                }
+            } 
             $tableTime .= "</tr>";
         }
 

@@ -25,10 +25,9 @@ if ($stmt && $stmt2->execute([$email])) {
     <div>
         <header>
             <h1>Teacher Dashboard</h1>
-            <h3><?php echo $email?></h3>
+            <h3><a href="./user/setting.php"><?php echo $_SESSION['email']?></a></h3>
         </header>
         <nav>
-            <a href="../teacher/subjects.php">View Subjects</a>
             <a href="../teacher/room.php">View Schedule</a>
             <a href="../room.php">View Rooms</a>
             <a href="#">Settings</a>
