@@ -22,7 +22,7 @@ $email = $_SESSION['email'];
         </header>
         <nav style="justify-content:space-between;">
             <div class='nav-nav'>
-                <a href="./teacher/room/transfer.php">Transfer a Subject</a>
+                <a href="./room/transfer.php">Transfer a Subject</a>
             </div>  
             <div class='nav-nav'>
                 <a href="./teacher/index.php">Back to dashboard</a>
@@ -36,6 +36,7 @@ $email = $_SESSION['email'];
     if ($token && $email) { 
         $data = array();
         $rows = $_SESSION['room'];
+        $rows3 = $_SESSION['allRoomSchedule'];
         $rows2 = $_SESSION['myRoom'];
         $roomCount = count($rows);
 
@@ -61,7 +62,7 @@ $email = $_SESSION['email'];
         }
         $tableTime = '';
         $timeSlots = generateTimeSlots();   
-        $ownedTimeSlots = getTimeSlots($rows2);
+        $ownedTimeSlots = getTimeSlots($rows3);
         // column
         foreach ($timeSlots as $timeSlot) {
             $htmlContent .= "<tr>
@@ -76,10 +77,13 @@ $email = $_SESSION['email'];
                     $vv = $ownedTimeSlot['cell_value'];
                     $cc = $ownedTimeSlot['cell_code'];
                     $rr = $ownedTimeSlot['cell_room'];
+                    $fname = $ownedTimeSlot['first_name'];
+                    $lname = $ownedTimeSlot['last_name'];
+                    $alias = aliasName($fname, $lname);
                     $cell_day = $ownedTimeSlot['cell_day'];
                     $roomSubDuration = $ownedTimeSlot['cell_start_end'];
                     if ($value == $vv && $rr == $code) {
-                        $owned_td .= "$rr - $cc";
+                        $owned_td .= "$alias - $cc";
                         $owned = true;
                     } 
                 }
@@ -113,6 +117,7 @@ $email = $_SESSION['email'];
                         </tr>    
                     </table>
                 </form>
+                
         <script>
             
         function prevRoom() {

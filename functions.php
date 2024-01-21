@@ -133,6 +133,8 @@
                 'cell_start_end' => convertTime($rowVal['start']) . ' — ' . convertTime($rowVal['end']),
                 'cell_code' => $rowVal['subject_code'],
                 'cell_room' => $rowVal['room_code'],
+                'first_name' => $rowVal['teacher_first_name'],
+                'last_name' => $rowVal['teacher_last_name']
             );
         }
         return $return;
@@ -160,4 +162,9 @@
         }
         return $timeSlots;
     };
+    function aliasName($first_name, $last_name) {
+        $mutated_first_name = strtoupper(substr($first_name, 0, 1)) . '.';
+        $aliasName = $mutated_first_name . ' ' . $last_name;
+        return $aliasName;
+    }
 ?>
