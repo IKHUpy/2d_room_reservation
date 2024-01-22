@@ -134,7 +134,9 @@
                 'cell_code' => $rowVal['subject_code'],
                 'cell_room' => $rowVal['room_code'],
                 'first_name' => $rowVal['teacher_first_name'],
-                'last_name' => $rowVal['teacher_last_name']
+                'last_name' => $rowVal['teacher_last_name'],
+                'room_schedule_id' => $rowVal['id'],
+                'var' => $rowVal['day_of_week'],
             );
         }
         return $return;
