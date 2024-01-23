@@ -22,9 +22,7 @@ session_start();
             <h1>Rescheduling</h1>
             <h3><a href="./user/setting.php"><?php echo $_SESSION['email']?></a></h3>
         </header>
-        <nav style="justify-content:space-between;">
-            <div class='nav-nav'>
-            </div>
+        <nav class="secondary-nav" id="secondary-nav">
             <div class='nav-nav'>
                 <a href="../teacher/index.php">Back to dashboard</a>
                 <a href="#">Settings</a>
@@ -32,7 +30,6 @@ session_start();
         </nav>
     </div>
     <h3 style='display:flex;align-self:center;'>choose slots to transfer...</h3>
-    <div id="to-transfer" style=''></div>
     <div class="room-body">
 
 <?php
@@ -108,9 +105,9 @@ if ($_SESSION['room'] && $_SESSION['myRoom']) {
             </form>
     ";
     echo "<script>
+    var parser = new DOMParser();
     var displaySlotsTemplate = '<label>selected 30m slot/s:</label><p>&nbsp&nbsp<b>?</p>';
     function transferReset() {
-        console.log('transferReset()');
         var formTable = document.getElementById('rs-formtable');
         var owneds = formTable.querySelectorAll('.owned');
         to_transfer.forEach(function (item) {
@@ -130,7 +127,6 @@ if ($_SESSION['room'] && $_SESSION['myRoom']) {
             var div = document.createElement('div');
             div.id = 'room-grid-tools';
             div.classList.add('nav-nav');
-            div.style.justifyContent = 'center';
             var a_reset = document.createElement('a');
             a_reset.classList.add('btn');
             a_reset.id = 'transfer-reset';
@@ -138,14 +134,14 @@ if ($_SESSION['room'] && $_SESSION['myRoom']) {
             var a_proceed = document.createElement('a');
             a_proceed.classList.add('btn');
             a_proceed.id = transferConfirm;
-            var to_transfer = document.getElementById('to-transfer');
+            var to_transfer_div = document.getElementById('secondary-nav');
             a_reset.text = 'reset';
             a_proceed.text = 'proceed';
             a_reset.href = '#';
             a_proceed.href = '#';
             div.appendChild(a_reset);
             div.appendChild(a_proceed);
-            to_transfer.parentNode.insertBefore(div, to_transfer.nextSibling);
+            to_transfer_div.insertBefore(div, to_transfer_div.firstChild);
             console.log(1);
         } else {
             console.log(0);
@@ -155,11 +151,27 @@ if ($_SESSION['room'] && $_SESSION['myRoom']) {
     foreach ($room_schedules as $room_schedule) {
         echo "
         document.getElementById('$room_schedule').addEventListener('click', function() {
-            this.classList.remove('owned');
-            to_transfer.push('$room_schedule');
-            var toUpdate = displaySlotsTemplate.replace('?', to_transfer.length);
-            document.getElementById('to-transfer').innerHTML = toUpdate;
-            roomTransferTool();
+            var div_to_transfer = document.getElementById('to-transfer');
+            if (this.classList.contains('owned')) {
+                if (!div_to_transfer) {
+                    var to_transfer_div = document.getElementById('secondary-nav');
+                    var div = document.createElement('div');
+                    div.id = 'to-transfer';
+                    this.classList.remove('owned');
+                    to_transfer.push('$room_schedule');
+                    var toUpdate = displaySlotsTemplate.replace('?', to_transfer.length);
+                    div.innerHTML = toUpdate;
+                    to_transfer_div.insertBefore(div, to_transfer_div.firstChild);
+                    roomTransferTool();
+                } else {
+                    div_to_transfer.innerHTML = '';
+                    this.classList.remove('owned');
+                    to_transfer.push('$room_schedule');
+                    var toUpdate = displaySlotsTemplate.replace('?', to_transfer.length);
+                    div_to_transfer.innerHTML = toUpdate;
+                    roomTransferTool();
+                }
+            }
         });
         ";
     }
