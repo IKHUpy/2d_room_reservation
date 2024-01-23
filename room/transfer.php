@@ -32,7 +32,7 @@ session_start();
         </nav>
     </div>
     <h3 style='display:flex;align-self:center;'>choose slots to transfer...</h3>
-    <p id="to-transfer" style='display:flex;align-self:center;'>0</p>
+    <div id="to-transfer" style=''></div>
     <div class="room-body">
 
 <?php
@@ -107,13 +107,59 @@ if ($_SESSION['room'] && $_SESSION['myRoom']) {
                 </table>
             </form>
     ";
-    echo "<script>";
+    echo "<script>
+    var displaySlotsTemplate = '<label>selected 30m slot/s:</label><p>&nbsp&nbsp<b>?</p>';
+    function transferReset() {
+        console.log('transferReset()');
+        var formTable = document.getElementById('rs-formtable');
+        var owneds = formTable.querySelectorAll('.owned');
+        to_transfer.forEach(function (item) {
+            document.getElementById(item).classList.add('owned');
+        });
+        to_transfer = [];
+        var toUpdate = displaySlotsTemplate.replace('?', 0);
+        document.getElementById('to-transfer').innerHTML = toUpdate;
+
+    }
+    function transferConfirm() {
+            
+    }
+    function roomTransferTool() {
+        var roomgrid = document.getElementById('room-grid-tools');
+        if (!roomgrid) { 
+            var div = document.createElement('div');
+            div.id = 'room-grid-tools';
+            div.classList.add('nav-nav');
+            div.style.justifyContent = 'center';
+            var a_reset = document.createElement('a');
+            a_reset.classList.add('btn');
+            a_reset.id = 'transfer-reset';
+            a_reset.onclick = transferReset;
+            var a_proceed = document.createElement('a');
+            a_proceed.classList.add('btn');
+            a_proceed.id = transferConfirm;
+            var to_transfer = document.getElementById('to-transfer');
+            a_reset.text = 'reset';
+            a_proceed.text = 'proceed';
+            a_reset.href = '#';
+            a_proceed.href = '#';
+            div.appendChild(a_reset);
+            div.appendChild(a_proceed);
+            to_transfer.parentNode.insertBefore(div, to_transfer.nextSibling);
+            console.log(1);
+        } else {
+            console.log(0);
+        }
+    };
+    ";
     foreach ($room_schedules as $room_schedule) {
         echo "
         document.getElementById('$room_schedule').addEventListener('click', function() {
             this.classList.remove('owned');
             to_transfer.push('$room_schedule');
-            document.getElementById('to-transfer').textContent = to_transfer.length;
+            var toUpdate = displaySlotsTemplate.replace('?', to_transfer.length);
+            document.getElementById('to-transfer').innerHTML = toUpdate;
+            roomTransferTool();
         });
         ";
     }
