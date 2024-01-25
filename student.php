@@ -13,7 +13,6 @@
     $data = array();
     $rows = $_SESSION['room'];
     $rows3 = $_SESSION['allRoomSchedule'];
-    $rows2 = $_SESSION['myRoom'];
     $roomCount = count($rows);
     $slots1 = getTimeSlots($rows3);
     $subjectNames = array();
