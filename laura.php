@@ -10,7 +10,7 @@
     <style>
         body {
             font-family: 'Lato', sans-serif;
-            background-image: url('/2d_room_reservation/img/bglogin.jpg');
+            background-image: url('img/bglogin.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -38,7 +38,7 @@
         header img {
             width: 80px;
             height: auto;
-            margin-right: 10px; /* Adjust the space between the logo and text */
+            margin-right: 10px; 
         }
 
         header h1 {
@@ -52,7 +52,17 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             max-width: 400px;
             width: 100%;
+            margin: 0 auto;
+            text-align: center;
+            }
+
+           @media (min-width: 768px) {
+
+       form {
+            margin-left: auto;
+            margin-right: 250px;
         }
+    }
 
         label {
             display: block;
@@ -86,10 +96,11 @@
 </head>
 <body>
     <header>
-        <img src="/2d_room_reservation/img/stilogo.png" alt="Your Logo">
-        <h1>Laura Login Page</h1>
+        <img src="img/stilogo.png" alt="Your Logo">
+        <h1>Laura Help Desk</h1>
     </header>
     <form action='lauraLogin.php' method="post">
+        <h1>Welcome, Admin</h1>
         <label for="password">Enter Password:</label>
         <input type="password" name="password" required>
         <button type="submit" name="submit">Login</button>

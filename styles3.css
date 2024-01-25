@@ -83,6 +83,9 @@ th {
 .owned {
     background-color: #d4d400;
 }
+.selected {
+    background-color: #a15c02;
+}
 .other {
     background-color: #0271B9;
 }
@@ -101,4 +104,10 @@ th {
 }
 .secondary-nav {
     justify-content: space-evenly;
+}
+header h3 a:visited {
+    color: #fff; /* Set the same color for visited links */
+}
+header h3 a {
+    color: #fff; /* Set the same color for visited links */
 }

@@ -136,11 +136,13 @@
                 'first_name' => $rowVal['teacher_first_name'],
                 'last_name' => $rowVal['teacher_last_name'],
                 'room_schedule_id' => $rowVal['id'],
-                'var' => $rowVal['day_of_week'],
+                'year_section' => $rowVal['year_section']
+
             );
         }
         return $return;
     }
+
 
     function convertTime($time) {
         $formattedTime = DateTime::createFromFormat('H:i:s', $time)->format('h:i A');
@@ -168,5 +170,19 @@
         $mutated_first_name = strtoupper(substr($first_name, 0, 1)) . '.';
         $aliasName = $mutated_first_name . ' ' . $last_name;
         return $aliasName;
+    }
+    function updateData($token, $email) {
+        include 'connect_db.php';
+        $query = "SELECT code, floor_level, has_projector, seat_count, 'type' FROM room;";
+        $query2 = "SELECT id, year_section, start, end, reserver, is_fixed, day_of_week, subject_code, room_code, teacher_first_name, teacher_last_name FROM room_schedules WHERE reserver = ?";
+        $query3 = "SELECT id, year_section, start, end, reserver, is_fixed, day_of_week, subject_code, room_code, teacher_first_name, teacher_last_name FROM room_schedules";
+        $stmt2 = $connect->prepare($query2);
+        $stmt3 = $connect->query($query3);
+        $stmt = $connect->query($query);
+        if ($stmt && $stmt2->execute([$email]) && $stmt3) {
+            $_SESSION['room'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $_SESSION['allRoomSchedule'] = $stmt3->fetchAll(PDO::FETCH_ASSOC);
+            $_SESSION['myRoom'] = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+        }
     }
 ?>
